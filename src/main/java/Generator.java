@@ -1,39 +1,31 @@
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
 
 public class Generator{
 
+    private DataReading dataReading;
+
     private int amount;
 
-    private File fileName;
-    private File filesurrName;
-    private File fileDomains;
-
-    private ArrayList<String> nameList;
-    private ArrayList<String> surrNameList;
-    private ArrayList<String> emailList;
-    private ArrayList<Person> personArrayList;
+    private List<String> nameList;
+    private List<String> surNameList;
+    private List<String> emailList;
+    private List<Person> personArrayList;
 
     public Generator(int amount){
 
+        this.dataReading = new DataReading();
         this.amount = amount;
-
-        this.fileName = new File("src/main/resources/names.txt");
-        this.filesurrName = new File("src/main/resources/surrName.txt");
-        this.fileDomains = new File("src/main/resources/domains.txt");
-
         this.nameList = new ArrayList<>();
-        this.surrNameList = new ArrayList<>();
+        this.surNameList = new ArrayList<>();
         this.emailList = new ArrayList<>();
-
         this.personArrayList = new ArrayList<>();
     }
     public void generateRandomListOfPeople() throws FileNotFoundException {
         Person newPerson;
-        readingData();
+        setLists();
         for(int i = 0; i < this.amount; i++) {
-            newPerson = new Person(generateRandomName(),generateRandomSurrName(),generateRandomEmail());
+            newPerson = new Person(generateRandomName(),generateRandomsurName(),generateRandomEmail());
             personArrayList.add(newPerson);
         }
     }
@@ -41,49 +33,38 @@ public class Generator{
         String name;
         Random rand = new Random();
         int x = rand.nextInt(this.nameList.size());
-        //System.out.println(x);
         name = this.nameList.get(x);
         return name;
     }
-    private String generateRandomSurrName(){
-        String surrName;
+    private String generateRandomsurName(){
+        String surName;
         Random rand = new Random();
-        int x = rand.nextInt(this.surrNameList.size());
-        //System.out.println(x);
-        surrName = this.surrNameList.get(x);
-        return surrName;
+        int x = rand.nextInt(this.surNameList.size());
+        surName = this.surNameList.get(x);
+        return surName;
     }
     private String generateRandomEmail(){
         String email = "";
         Random rand = new Random();
-        email = email + generateRandomName() + generateRandomSurrName() +"@";
+        email = email + generateRandomName() + generateRandomsurName() +"@";
         int x = rand.nextInt(this.emailList.size());
-        //System.out.println(x);
         email = email+this.emailList.get(x);
         return email;
     }
-    private void readingData() throws FileNotFoundException {
-        Scanner scannerName = new Scanner(fileName);
-        Scanner scannerSurrName = new Scanner(filesurrName);
-        Scanner scannerEmail = new Scanner(fileDomains);
-        while(scannerName.hasNext()){
-            this.nameList.add(scannerName.nextLine());
-        }
-        while(scannerSurrName.hasNext()){
-            this.surrNameList.add(scannerSurrName.nextLine());
-        }
-        while(scannerEmail.hasNext()){
-            this.emailList.add(scannerEmail.nextLine());
-        }
+
+    private void setLists() throws FileNotFoundException {
+        this.nameList = dataReading.readingNameData();
+        this.surNameList = dataReading.readingSurNameData();
+        this.emailList = dataReading.readingeEmailData();
     }
 
-    public void printArrayList(){
-        for(int i = 0; i < this.personArrayList.size(); i++){
-            System.out.println(personArrayList.get(i));
-        }
-    }
     public void sortArray(){
         Collections.sort(this.personArrayList, Comparator.comparing(Person::getName).
-                thenComparing(Person::getSurrName).thenComparing(Person::getEmail));
+                thenComparing(Person::getsurName).thenComparing(Person::getEmail));
+    }
+
+    @Override
+    public String toString() {
+        return this.personArrayList.toString();
     }
 }

@@ -1,40 +1,46 @@
 public class Person {
     private String name;
-    private String surrName;
+    private String surName;
     private String email;
 
-    public Person(String name, String surrName, String email) {
-        boolean validName = name.matches("[\\w\\-'\\s]+");
-        boolean validSurrName = surrName.matches("[\\w\\-'\\s]+");
-        boolean validEmail = email.matches("^(.+)@(.+)$");
-        if(validName && validSurrName && validEmail) {
-            this.name = name;
-            this.surrName = surrName;
-            this.email = email;
-        }
-        else {
-            System.out.println("Invalid arguments.");
-            System.out.println(name);
-            System.out.println(surrName);
-            System.out.println(email);
-        }
+    public Person(String name, String surName, String email) {
+        this.name = name;
+        this.surName = surName;
+        this.email = email;
     }
 
     public String getName() {
         return name;
     }
 
-    public String getSurrName() {
-        return surrName;
+    public String getsurName() {
+        return surName;
     }
 
     public String getEmail() {
         return email;
     }
+    private boolean checkName(String name){
+        boolean validName = name.matches("[\\w\\-'\\s]+");
+        return validName;
+    }
+    private boolean checkSurName(String surName){
+        boolean validsurName = surName.matches("[\\w\\-'\\s]+");
+        return validsurName;
+    }
+    private boolean checkEmail(String email){
+        boolean validEmail = email.matches("^(.+)@(.+)$");
+        return validEmail;
+    }
 
     @Override
     public String toString() {
-        return "Name: " + this.name + "  Surrname: " +this.surrName + "  e-mail: "+ this.email;
+        if(checkName(surName) && checkEmail(email) && checkSurName(surName)) {
+            return "Name: " + name + "  surname: " + surName + "  e-mail: " + email + "\n";
+        }
+        else {
+            throw new IllegalArgumentException("Invalid arguments\n");
+        }
     }
 
 
